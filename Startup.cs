@@ -59,10 +59,7 @@ namespace DDSProject
             });
         }
 
-        /// <summary>
-        /// Creates a Cosmos DB database and a container with the specified partition key. 
-        /// </summary>
-        /// <returns></returns>
+        // Creates a Cosmos DB database and a container with the specified partition key. 
         private static async Task<PatientService> InitializeCosmosClientInstanceAsync(IConfigurationSection configurationSection)
         {
             var databaseName = configurationSection.GetSection("DatabaseName").Value;

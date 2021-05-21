@@ -18,36 +18,35 @@ namespace DDSProject.Services
             string databaseName,
             string containerName)
         {
-            this._container = dbClient.GetContainer(databaseName, containerName);
+            _container = dbClient.GetContainer(databaseName, containerName);
         }
         
         public async Task AddItemAsync(Patient item)
         {
-            await this._container.CreateItemAsync<Patient>(item, new PartitionKey(item.Id));
+            await _container.CreateItemAsync<Patient>(item, new PartitionKey(item.Id));
         }
 
         public async Task DeleteItemAsync(string id)
         {
-            await this._container.DeleteItemAsync<Patient>(id, new PartitionKey(id));
+            await _container.DeleteItemAsync<Patient>(id, new PartitionKey(id));
         }
 
         public async Task<Patient> GetItemAsync(string id)
         {
             try
             {
-                ItemResponse<Patient> response = await this._container.ReadItemAsync<Patient>(id, new PartitionKey(id));
+                ItemResponse<Patient> response = await _container.ReadItemAsync<Patient>(id, new PartitionKey(id));
                 return response.Resource;
             }
             catch(CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
             { 
                 return null;
             }
-
         }
 
         public async Task<IEnumerable<Patient>> GetItemsAsync(string queryString)
         {
-            var query = this._container.GetItemQueryIterator<Patient>(new QueryDefinition(queryString));
+            var query = _container.GetItemQueryIterator<Patient>(new QueryDefinition(queryString));
             List<Patient> results = new List<Patient>();
             while (query.HasMoreResults)
             {
@@ -61,7 +60,7 @@ namespace DDSProject.Services
 
         public async Task UpdateItemAsync(string id, Patient item)
         {
-            await this._container.UpsertItemAsync<Patient>(item, new PartitionKey(id));
+            await _container.UpsertItemAsync<Patient>(item, new PartitionKey(id));
         }
     }
 }
